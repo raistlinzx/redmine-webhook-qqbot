@@ -31,7 +31,7 @@ apiserver.addModule('redmine', 'eventnotify', {
     post: function (request, response) {
       request.resume()
       request.once('end', function () {
-        console.log(request.body.payload.journal.details)
+        // console.log(request.body.payload.journal.details)
         var botmsg = redmine_webhook_parse(request.body.payload)
         // console.log(botmsg)
         var qqbot_querystring= querystring.stringify({type :request.querystring.type, to: request.querystring.to, msg: botmsg})
@@ -73,6 +73,7 @@ function redmine_webhook_parse(payload) {
     action = '更新了'
     who = payload.journal.author.lastname + payload.journal.author.firstname
     if(payload.journal.details.length>0) {
+      console.log(payload.journal.details)
       for(detail in payload.journal.details) {
         if(detail.prop_key=='status_id') brief += '%0A> 状态 => ' + payload.issue.status.name
       }
