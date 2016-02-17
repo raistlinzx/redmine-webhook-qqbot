@@ -30,7 +30,7 @@ apiserver.addModule('redmine', 'eventnotify', {
           type: request.querystring.type,
           to: request.querystring.to,
           method: 'POST',
-          payload: request.body.test // thanks to payloadParser
+          payload: request.body // thanks to payloadParser
         })
       })
     }
