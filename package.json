@@ -1,0 +1,27 @@
+{
+  "name": "redmine-webhook-qqbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raistlinzx/redmine-webhook-qqbot.git"
+  },
+  "keywords": [
+    "redmine",
+    "webhook",
+    "qqbot"
+  ],
+  "author": "Ryan Zhao <raistlinzx@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/raistlinzx/redmine-webhook-qqbot/issues"
+  },
+  "homepage": "https://github.com/raistlinzx/redmine-webhook-qqbot#readme",
+  "dependencies": {
+    "apiserver": "^0.3.1"
+  }
+}
