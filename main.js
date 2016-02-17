@@ -26,6 +26,7 @@ apiserver.addModule('redmine', 'eventnotify', {
     post: function (request, response) {
       request.resume()
       request.once('end', function () {
+        console.log(request.body)
         response.serveJSON({
           type: request.querystring.type,
           to: request.querystring.to,
