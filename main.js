@@ -1,5 +1,10 @@
 var http = require('http'),
+    querystring = require("querystring"),
+    fs = require('fs'),
     ApiServer = require('apiserver')
+
+
+var qqbot = JSON.parse(fs.readFileSync("qqbot.json"))
 
 apiserver = new ApiServer({
 	port: 8080,
@@ -26,7 +31,15 @@ apiserver.addModule('redmine', 'eventnotify', {
     post: function (request, response) {
       request.resume()
       request.once('end', function () {
-        console.log(request.body)
+        // console.log(request.body)
+        var botmsg = redmine_webhook_parse(request.body.payload)
+        // console.log(botmsg)
+        var qqbot_querystring= querystring.stringify({type :request.querystring.type, to: request.querystring.to, msg: botmsg})
+        // console.log(qqbot.uri)
+        http.get(qqbot.uri + '?' + qqbot_querystring, function(res) {
+          console.log(res.statusCode);
+        })
+
         response.serveJSON({
           type: request.querystring.type,
           to: request.querystring.to,
@@ -42,3 +55,24 @@ apiserver.addModule('redmine', 'eventnotify', {
 apiserver.router.addRoutes([
   ['/notify/:type/:to', 'redmine/eventnotify#notify', {}, true]
 ])
+
+function redmine_webhook_parse(payload) {
+  // console.log(payload)
+  // return 'WHO DO ISSUSEID ISSUSETITLE [URL]'
+  var who = '',
+      action = '',
+      issueid = payload.issue.id,
+      issuetitle = payload.issue.subject,
+      issueurl = payload.url,
+      brief = ''
+
+  if(payload.action=='opened') {
+    action = '新建了'
+    who = payload.issue.author.lastname + payload.issue.author.firstname
+  } else if (payload.action == 'updated') {
+    action = '更新了'
+    who = payload.journal.author.lastname + payload.journal.author.firstname
+  }
+
+  return who + ' ' + action + ' #' + issueid + ' ' + issuetitle + ' [' + issueurl + '] ' + brief
+}
