@@ -31,7 +31,7 @@ apiserver.addModule('redmine', 'eventnotify', {
     post: function (request, response) {
       request.resume()
       request.once('end', function () {
-        // console.log(request.body)
+        console.log(request.body)
         var botmsg = redmine_webhook_parse(request.body.payload)
         // console.log(botmsg)
         var qqbot_querystring= querystring.stringify({type :request.querystring.type, to: request.querystring.to, msg: botmsg})
