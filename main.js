@@ -72,6 +72,11 @@ function redmine_webhook_parse(payload) {
   } else if (payload.action == 'updated') {
     action = '更新了'
     who = payload.journal.author.lastname + payload.journal.author.firstname
+    if(payload.journal.details.length>0) {
+      for(detail in payload.journal.details) {
+        if(detail.prop_key=='status_id') brief += '%0A> 状态 => ' + payload.issue.status.name
+      }
+    }
   }
 
   return who + ' ' + action + ' #' + issueid + ' ' + issuetitle + ' [' + issueurl + '] ' + brief
