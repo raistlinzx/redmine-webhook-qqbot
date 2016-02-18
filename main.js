@@ -1,4 +1,5 @@
 var http = require('http'),
+    req = require('request'),
     querystring = require("querystring"),
     fs = require('fs'),
     ApiServer = require('apiserver')
@@ -34,8 +35,8 @@ apiserver.addModule('redmine', 'eventnotify', {
         // console.log(request.body.payload.journal.details)
         var botmsg = redmine_webhook_parse(request.body.payload)
         // console.log(botmsg)
-        var qqbot_querystring= querystring.stringify({type :request.querystring.type, to: request.querystring.to, msg: botmsg})
-        // console.log(qqbot.uri)
+        var qqbot_querystring= 'type=' + request.querystring.type + '&to=' + request.querystring.to + "&msg="+ encodeURIComponent(botmsg)
+        // console.log(qqbot_querystring)
         http.get(qqbot.uri + '?' + qqbot_querystring, function(res) {
           console.log(res.statusCode);
         })
