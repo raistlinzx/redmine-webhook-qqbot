@@ -1,5 +1,4 @@
 var http = require('http'),
-    req = require('request'),
     querystring = require("querystring"),
     fs = require('fs'),
     ApiServer = require('apiserver')
