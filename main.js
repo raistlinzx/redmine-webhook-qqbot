@@ -76,8 +76,7 @@ function redmine_webhook_parse(payload) {
       console.log(payload.journal.details)
       payload.journal.details.forEach(function(detail) {
         if(detail.prop_key=='status_id') {
-          brief += '\
-          - 状态 变更为 ' + payload.issue.status.name
+          brief += "\r\n - 状态 变更为 " + payload.issue.status.name
         }
       })
     }
