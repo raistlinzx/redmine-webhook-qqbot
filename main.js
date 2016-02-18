@@ -75,12 +75,18 @@ function redmine_webhook_parse(payload) {
     if(payload.journal.details.length>0) {
       console.log(payload.journal.details)
       payload.journal.details.forEach(function(detail) {
+        if(detail.prop_key=='assigned_to_id' && detail.value) {
+          brief += "\r\n - 问题指派给了 " + payload.issue.assignee.lastname + payload.issue.assignee.firstname
+        }
         if(detail.prop_key=='status_id') {
           brief += "\r\n - 状态 变更为 " + payload.issue.status.name
+        }
+        if(detail.prop_key=='priority_id') {
+          brief += "\r\n - 优先级 变更为 " + payload.issue.priority.name
         }
       })
     }
   }
 
-  return who + ' ' + action + ' #' + issueid + ' ' + issuetitle + ' [' + issueurl + '] ' + brief
+  return who + ' ' + action + ' #' + issueid + ' ' + issuetitle + brief + "\r\n" + issueurl
 }
