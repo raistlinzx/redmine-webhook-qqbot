@@ -69,9 +69,15 @@ function redmine_webhook_parse(payload) {
   if(payload.action=='opened') {
     action = '新建了'
     who = payload.issue.author.lastname + payload.issue.author.firstname
+
+    if(payload.issue.assignee) {
+      brief += "\r\n - 问题指派给了 " + payload.issue.assignee.lastname + payload.issue.assignee.firstname
+    }
+    
   } else if (payload.action == 'updated') {
     action = '更新了'
     who = payload.journal.author.lastname + payload.journal.author.firstname
+
     if(payload.journal.details.length>0) {
       console.log(payload.journal.details)
       payload.journal.details.forEach(function(detail) {
@@ -86,6 +92,7 @@ function redmine_webhook_parse(payload) {
         }
       })
     }
+
   }
 
   return who + ' ' + action + ' #' + issueid + ' ' + issuetitle + brief + "\r\n" + issueurl
