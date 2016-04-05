@@ -42,7 +42,7 @@ apiserver.addModule('redmine', 'eventnotify', {
         // })
         var postData = querystring.stringify({
             'type':  request.querystring.type,
-            'to': request.querystring.to,
+            'to': decodeURIComponent(request.querystring.to),
             'msg': botmsg
         });
 
