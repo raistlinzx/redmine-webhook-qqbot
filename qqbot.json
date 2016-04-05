@@ -1,3 +1,4 @@
 {
-  "uri": "http://dev.qiyestore.com/qqbot/send"
+    "host": "dev.qiyestore.com",
+    "path": "/qqbot/send"
 }

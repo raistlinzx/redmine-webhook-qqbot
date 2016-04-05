@@ -33,12 +33,32 @@ apiserver.addModule('redmine', 'eventnotify', {
       request.once('end', function () {
         // console.log(request.body.payload.journal.details)
         var botmsg = redmine_webhook_parse(request.body.payload)
+        // var botmsg = request.body.payload
         // console.log(botmsg)
-        var qqbot_querystring= 'type=' + request.querystring.type + '&to=' + request.querystring.to + "&msg="+ encodeURIComponent(botmsg)
+        // var qqbot_querystring= 'type=' + request.querystring.type + '&to=' + request.querystring.to + "&msg="+ encodeURIComponent(botmsg)
         // console.log(qqbot_querystring)
-        http.get(qqbot.uri + '?' + qqbot_querystring, function(res) {
-          console.log(res.statusCode);
-        })
+        // http.get(qqbot.uri + '?' + qqbot_querystring, function(res) {
+        //   console.log(res.statusCode);
+        // })
+        var postData = querystring.stringify({
+            'type':  request.querystring.type,
+            'to': request.querystring.to,
+            'msg': botmsg
+        });
+
+        var reqq = http.request({
+            host: qqbot.host,
+            method: 'POST',
+            path: qqbot.path,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Length': Buffer.byteLength(postData)
+            }
+        }, function(res) {
+            console.log(res.statusCode);
+        });
+        reqq.write(postData);
+        reqq.end();
 
         response.serveJSON({
           type: request.querystring.type,
@@ -73,7 +93,7 @@ function redmine_webhook_parse(payload) {
     if(payload.issue.assignee) {
       brief += "\r\n - 问题指派给了 " + payload.issue.assignee.lastname + payload.issue.assignee.firstname
     }
-    
+
   } else if (payload.action == 'updated') {
     action = '更新了'
     who = payload.journal.author.lastname + payload.journal.author.firstname
